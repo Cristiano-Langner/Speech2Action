@@ -30,4 +30,12 @@ def recognize_speech(input_audio_file):
 
     # Process the audio file and recognize speech
     result = pipe(input_audio_file, generate_kwargs={"language": "portuguese"})
-    return result["text"]
+    recognized_text = result["text"]
+
+    # Save the recognized text to a .txt file
+    with open("recognized_text.txt", "w", encoding="utf-8") as file:
+        file.write(recognized_text)
+    
+    print(f"Recognized text saved to 'recognized_text.txt'.")
+    
+    return recognized_text
