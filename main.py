@@ -1,6 +1,7 @@
 from scripts.record_audio import record_audio
 from scripts.speech_recognition import recognize_speech
 from scripts.inference import inference_text
+from scripts.actions import execute_action
 import warnings
 
 # Suppress specific warnings
@@ -17,26 +18,27 @@ def main():
         record_duration = 5  # duration of the recording in seconds
         record_audio(output_file, duration=record_duration)
         print(f"Audio recorded and saved as {output_file}.")
-        print("/n")
+        print("\n")
 
         # Step 2: Process the recorded audio and recognize speech
-        print("---------------------------------------------------")
         print("Starting speech recognition...")
         speech_text = recognize_speech(output_file)
         print(f"Recognized speech: {speech_text}")
-        print("/n")
+        print("\n")
         
         # Step 3: Inference the recognized text
-        print("---------------------------------------------------")
         print("Starting inference...")
-        text_inference = inference_text()
-        print(f"Inference text: {text_inference}")
-        print("/n")
+        action = inference_text()
+        print(f"Inference text: {action}")
+        print("\n")
+        
+        print("Executando ação...")
+        result = execute_action(action)
+        print(f"Resultado: {result}")
 
         # Ask the user if they want to continue or stop
-        print("---------------------------------------------------")
         user_input = input("Do you want to record again? (y/n): ").strip().lower()
-        print("/n")
+        print("\n")
 
         if user_input != 'y':
             print("Exiting the program.")
