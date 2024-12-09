@@ -3,11 +3,14 @@ from scripts.speech_recognition import recognize_speech
 from scripts.inference import inference_text
 from scripts.actions import execute_action
 import warnings
+import logging
 
 # Suppress specific warnings
 warnings.filterwarnings("ignore", category=UserWarning)  # To ignore user warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)  # To ignore deprecation warnings
 warnings.filterwarnings("ignore", category=FutureWarning)  # To ignore future warnings
+logging.getLogger("transformers").setLevel(logging.ERROR)
+logging.getLogger("torch").setLevel(logging.ERROR)
 
 def main():
     try:
