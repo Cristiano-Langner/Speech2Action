@@ -2,60 +2,52 @@ import os
 import webbrowser
 
 def execute_action(action):
+    # Verifica o formato básico da ação
     if not action.startswith("AÇÃO:") or ";" not in action:
         return "Comando inválido ou mal formatado. Nenhuma ação realizada."
     
+    # Divide o comando em tipo de ação e detalhes
     try:
-        action_type, details = action.replace("AÇÃO:", "", 1).split(";", 1)
-        action_type = action_type.strip().lower()
-        details = details.strip()
+        tipo_acao, detalhes = action[5:].split(";", 1)  # Remove "AÇÃO:" e divide por ";"
     except ValueError:
-        return "Erro ao interpretar a ação. Nenhuma ação realizada."
-    
-    if action_type in ["abrir_navegador", "abrir navegador"]:
-        if "url=" in details:
-            url = details.split("url=", 1)[-1].strip()
-            webbrowser.open(url)
-            return f"Navegador aberto e acessando {url}."
-        else:
-            return "URL não especificado na ação. Nenhuma ação realizada."
+        return "Comando mal formatado. Nenhuma ação realizada."
 
-    elif action_type in ["pesquisar_no_google", "pesquisar no google"]:
-        if "query=" in details:
-            query = details.split("query=", 1)[-1].strip()
-            # Substituir espaços por "+" para formatação correta da URL
-            query = query.replace(" ", "+")
-            search_url = f"https://www.google.com/search?q={query}"
-            webbrowser.open(search_url)
-            return f"Navegador aberto com a busca: {query}."
-        else:
-            return "Query de busca não especificada. Nenhuma ação realizada."
+    # Normaliza os dados para evitar problemas de capitalização
+    tipo_acao = tipo_acao.strip().lower()
+    detalhes = detalhes.strip()
 
-    elif action_type == "Criar_pasta":
-        folder_name = "test_folder/" + folder_name
-        # Extração do nome da pasta
-        if "nome=" in details:
-            folder_name = details.split("nome=", 1)[-1].strip()
-            os.makedirs(folder_name, exist_ok=True)
-            return f"Pasta '{folder_name}' criada com sucesso."
-        else:
-            return "Nome da pasta não especificado. Nenhuma ação realizada."
+    # Identifica e executa ações específicas
+    if tipo_acao == "criar_pasta":
+        folder_name = detalhes.split("=")[-1]
+        return create_folder(folder_name)
+    elif tipo_acao == "abrir_navegador":
+        url = detalhes.split("=")[-1]
+        return open_browser(url)
+    elif tipo_acao == "responder_pergunta":
+        return detalhes  # Apenas retorna a resposta
+    else:
+        return "Ação não reconhecida ou inválida."
 
-    elif action_type == "Excluir_arquivo":
-        folder_name = "test_folder/" + folder_name
-        # Extração do nome do arquivo
-        if "nome=" in details:
-            file_name = details.split("nome=", 1)[-1].strip()
-            try:
-                os.remove(file_name)
-                return f"Arquivo '{file_name}' excluído com sucesso."
-            except FileNotFoundError:
-                return f"Arquivo '{file_name}' não encontrado."
-        else:
-            return "Nome do arquivo não especificado. Nenhuma ação realizada."
+def create_folder(folder_name):
+    """
+    Cria uma pasta no diretório atual.
+    """
+    try:
+        if not folder_name:
+            return "Nome da pasta não fornecido. Ação não realizada."
+        os.makedirs(folder_name, exist_ok=True)
+        return f"Pasta '{folder_name}' criada com sucesso."
+    except Exception as e:
+        return f"Erro ao criar pasta: {e}"
 
-    elif action_type == "Nenhuma ação":
-        return "Comando não compreendido ou irrelevante para automação."
-
-    # Ação desconhecida
-    return "Ação desconhecida. Nenhuma ação realizada."
+def open_browser(url):
+    """
+    Abre um navegador com a URL fornecida.
+    """
+    try:
+        if not url:
+            return "URL não fornecida. Ação não realizada."
+        webbrowser.open(url)
+        return f"Navegador aberto com a URL: {url}"
+    except Exception as e:
+        return f"Erro ao abrir o navegador: {e}"

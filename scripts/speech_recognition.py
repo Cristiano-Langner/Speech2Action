@@ -18,7 +18,7 @@ def recognize_speech(input_audio_file):
     # Load the processor
     processor = AutoProcessor.from_pretrained(model_id)
 
-    # Create the pipeline
+    # Create the pipeline with just the language argument and without forced_decoder_ids
     pipe = pipeline(
         "automatic-speech-recognition",
         model=model,
@@ -26,6 +26,9 @@ def recognize_speech(input_audio_file):
         feature_extractor=processor.feature_extractor,
         torch_dtype=torch_dtype,
         device=device,
+        # Remove or avoid the use of forced_decoder_ids
+        # Forcing the language explicitly
+        model_kwargs={"language": "portuguese"}  # Specify language here without conflicting parameters
     )
 
     # Process the audio file and recognize speech
