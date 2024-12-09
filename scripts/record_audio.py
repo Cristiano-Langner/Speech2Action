@@ -2,12 +2,6 @@ import pyaudio
 from pydub import AudioSegment
 
 def record_audio(output_mp3_file, duration):
-    """
-    Records audio from the microphone and saves it as an MP3 file.
-    
-    :param output_mp3_file: Name of the MP3 file to save
-    :param duration: Recording duration in seconds
-    """
     audio_format = pyaudio.paInt16  # Audio format (16-bit PCM)
     channels = 1                    # Number of channels (mono)
     sample_rate = 44100             # Sampling rate (44.1 kHz)

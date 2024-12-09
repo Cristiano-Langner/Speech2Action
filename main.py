@@ -18,7 +18,6 @@ def main():
             output_file = "recording.mp3"
             record_duration = 5  # duration of the recording in seconds
             record_audio(output_file, duration=record_duration)
-            print(f"Audio recorded and saved as {output_file}.")
             print("\n")
 
             # Step 2: Process the recorded audio and recognize speech
@@ -33,9 +32,10 @@ def main():
             print(f"Inference text: {action}")
             print("\n")
             
-            print("Executando ação...")
+            # Step 4: Performing actions
+            print("Performing action...")
             result = execute_action(action)
-            print(f"Resultado: {result}")
+            print(f"Result: {result}")
 
             # Ask the user if they want to continue or stop
             user_input = input("Do you want to record again? (y/n): ").strip().lower()
@@ -46,7 +46,7 @@ def main():
                 break  # Exit the loop and stop the program
             
     except KeyboardInterrupt:
-        print("\nInterrompido pelo usuário. Encerrando o programa.")
+        print("\nInterrupted by user. Ending the program.")
         
 if __name__ == "__main__":
     main()

@@ -2,21 +2,21 @@ import os
 import webbrowser
 
 def execute_action(action):
-    # Verifica o formato básico da ação
+    # Check the basic format of the action
     if not action.startswith("AÇÃO:") or ";" not in action:
         return "Comando inválido ou mal formatado. Nenhuma ação realizada."
-    
-    # Divide o comando em tipo de ação e detalhes
+
+    # Split the command into action type and details
     try:
         tipo_acao, detalhes = action[5:].split(";", 1)  # Remove "AÇÃO:" e divide por ";"
     except ValueError:
         return "Comando mal formatado. Nenhuma ação realizada."
 
-    # Normaliza os dados para evitar problemas de capitalização
+    # Normalizes data to avoid capitalization issues
     tipo_acao = tipo_acao.strip().lower()
     detalhes = detalhes.strip()
 
-    # Identifica e executa ações específicas
+    # Identifies and executes specific actions
     if tipo_acao == "criar_pasta":
         folder_name = detalhes.split("=")[-1]
         return create_folder(folder_name)
@@ -24,14 +24,11 @@ def execute_action(action):
         url = detalhes.split("=")[-1]
         return open_browser(url)
     elif tipo_acao == "responder_pergunta":
-        return detalhes  # Apenas retorna a resposta
+        return detalhes
     else:
         return "Ação não reconhecida ou inválida."
-
+# Creates a folder in the current directory
 def create_folder(folder_name):
-    """
-    Cria uma pasta no diretório atual.
-    """
     try:
         if not folder_name:
             return "Nome da pasta não fornecido. Ação não realizada."
@@ -40,10 +37,8 @@ def create_folder(folder_name):
     except Exception as e:
         return f"Erro ao criar pasta: {e}"
 
+# Opens a browser with the given URL
 def open_browser(url):
-    """
-    Abre um navegador com a URL fornecida.
-    """
     try:
         if not url:
             return "URL não fornecida. Ação não realizada."
